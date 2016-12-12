@@ -1,0 +1,17 @@
+{
+  "extends": "eslint-config-airbnb",
+  "rules": {
+    "camelcase": "off",
+    "class-methods-use-this": [
+      0
+    ],
+    "no-continue": [
+      0
+    ],
+    "spaced-comment": [
+      0,
+      "always"
+    ]
+
+  }
+}

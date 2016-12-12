@@ -1,0 +1,9 @@
+<div class="cell">
+  <div id="list" class="bd">
+    {{#each products }}
+    {{> product_item product=this }}
+    {{else}}
+    您没有已经发布的商品。
+    {{/each}}
+  </div>
+</div>

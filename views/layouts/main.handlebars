@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="description" content="{{@root.config.title}}" />
+    <meta name="author" content="oizhaolei@gmail.com" />
+    <title>{{title}}</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/weui/0.4.3/style/weui.min.css"/>
+    <link rel="stylesheet" href="//cdn.bootcss.com/jquery-weui/0.8.2/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="{{@root.config.aliyun.static_content}}/css/index.css"/>
+    <link rel="stylesheet" href="{{@root.config.aliyun.static_content}}/css/style.css"/>
+    {{{block "css"}}}
+  </head>
+  <body ontouchstart>
+    <div class="container" id="container">
+      {{{body}}}
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-weui/0.8.2/js/jquery-weui.min.js"></script>
+    <script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="{{@root.config.aliyun.static_content}}/js/ydw_common.js"></script>
+    <script>
+     var jsApilist = [];
+    </script>
+
+    {{{block "scripts"}}}
+    <script>
+     if (jsApilist.length > 0) {
+         $.ajax({
+             url: '/weixin/getsignature',
+             type: 'post',
+             data: {
+                 url: location.href.split('#')[0]
+             }
+         }).done(function(r) {
+             wx.config({
+                 appId: r.appId,
+                 timestamp: r.timestamp,
+                 nonceStr: r.nonceStr,
+                 signature: r.signature,
+                 jsApiList: jsApilist
+             });
+         });
+     }
+     $(function() {
+         {{#if msg}}
+         $.toptip('{{msg}}', 'warning');
+         {{/if}}
+     });
+    </script>
+  </body>
+</html>

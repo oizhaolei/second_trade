@@ -1,0 +1,16 @@
+<!--tab start-->
+<div class="weui_tabbar">
+  <a href="{{#if (eq current 'main')}}javascript:;{{else}}/main{{/if}}" class="weui_tabbar_item{{#if (eq current 'main')}} weui_bar_item_on{{else}}{{/if}}">
+    <div class="weui_tabbar_icon">
+      <img src="{{@root.config.aliyun.static_content}}/images/wj{{#if (eq current 'main')}}{{else}}2{{/if}}.jpg" alt=""/>
+    </div>
+    <p class="weui_tabbar_label">一览</p>
+  </a>
+  <a href="{{#if (eq current 'me')}}javascript:;{{else}}/me{{/if}}" class="weui_tabbar_item{{#if (eq current 'me')}} weui_bar_item_on{{else}}{{/if}}">
+    <div class="weui_tabbar_icon">
+      <img src="{{@root.config.aliyun.static_content}}/images/wd{{#if (eq current 'me')}}{{else}}2{{/if}}.png" alt=""/>
+    </div>
+    <p class="weui_tabbar_label">我的</p>
+  </a>
+</div>
+<!--tab end-->

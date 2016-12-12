@@ -1,0 +1,98 @@
+<div class="cell">
+  <div class="bd">
+
+    <form id="new_product_form" method="post">
+      <input type="hidden" name="seller" value="{{req.session.user._id}}" />
+      <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <textarea id="product_name" class="weui_textarea ydw_font_small" placeholder="标题" rows="1" name="product_detail.product_name"></textarea>
+          </div>
+        </div>
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <textarea id="product_desc" class="weui_textarea ydw_font_small" placeholder="详细说明" rows="4" name="product_detail.product_desc"></textarea>
+          </div>
+        </div>
+        <div class="weui_cell">
+          <div class="weui_cell_bd weui_cell_primary">
+            <div class="weui_uploader">
+              <div class="weui_uploader_bd">
+                <ul class="weui_uploader_files">
+                </ul>
+                <div class="weui_uploader_input_wrp">
+                  <input class="weui_uploader_input" type="button"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="ydw_bottom_area">
+      <div class="weui-row">
+        <div class="weui-col-100">
+          <a href="javascript:;" id="btn_new_product" class="weui_btn weui_btn_primary">发布</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Locate_nav end-->
+{{#extend "scripts"}}
+<script>
+ jsApilist = jsApilist.concat([
+     'chooseImage',
+     'uploadImage',
+     'previewImage'
+ ]);
+ $(function () {
+     $('#btn_new_product').click(function () {
+         $.showLoading('数据提交中');
+         $('#new_product_form').submit();
+     });
+     $('.weui_uploader_input').click(function () {
+         wx.chooseImage({
+             count: 9,
+             sizeType: ['original', 'compressed'],
+             sourceType: ['album', 'camera'],
+             success: function (res) {
+                 var localIds = res.localIds;
+                 for(var index in localIds){
+                     wx.uploadImage({
+                         localId: localIds[index].toString(),
+                         isShowProgressTips: 1,
+                         success: function (res) {
+                             var serverId = res.serverId;
+                             $.ajax({
+                                 url: '/product/upload',
+                                 type: 'post',
+                                 data: {
+                                     mediaid: serverId
+                                 }
+                             }).then(function(data) {
+                                 if(data != null && data != ''){
+                                     previewUrls.push(data);
+                                     var insertHtml = '<li class=\"weui_uploader_file\" style=\"background-image:url(' + data + ')\" onclick=\"javascript:previewImage(\'' + data + '\');\"></li>';
+                                     $('.weui_uploader_files').append(insertHtml);
+                                 }
+                             });
+                         }
+                     });
+                 }
+             }
+         });
+     });
+
+ });
+ function previewImage(url) {
+     wx.previewImage({
+         current: url,
+         urls: previewUrls
+     });
+ };
+
+</script>
+{{/extend}}

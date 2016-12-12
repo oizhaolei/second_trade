@@ -1,0 +1,66 @@
+<div class="cell">
+  <div class="hd">
+    <p class="page_desc">{{body}}</p>
+  </div>
+  <div class="bd">
+    <div class="weui_cells">
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <p>收款方</p>
+        </div>
+        <div class="weui_cell_ft">{{@root.config.title}}</div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <p>订单号</p>
+        </div>
+        <div class="weui_cell_ft">
+          {{event_type}}_{{now 'YYYYMMDD'}}_{{event_id}}
+        </div>
+      </div>
+      {{#if (and bonus (gt bonus 0))}}
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <p>玩贝抵值</p>
+        </div>
+        <div class="weui_cell_ft">
+          {{bonus}}元
+        </div>
+      </div>
+      {{/if}}
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <p>支付金额</p>
+        </div>
+        <div class="weui_cell_ft">
+          {{fee}}元
+        </div>
+      </div>
+    </div>
+
+    <div class="ydw_bottom_area">
+      <button id="btn_pay" type="button" class="weui_btn weui_btn_primary btn_pay">支付</button>
+    </div>
+  </div>
+</div>
+
+
+{{#extend "scripts"}}
+<script>
+ $(function () {
+     //pay
+     $('.btn_pay').click(function () {
+         wx_unified({
+             fee : {{fee}},
+             bonus : {{bonus}},
+             event_id : {{event_id}},
+             event_type : '{{event_type}}',
+             body : '{{body}}'
+         }, function() {
+             window.location = '{{redirect}}';
+         });
+     });
+ });
+
+</script>
+{{/extend}}
