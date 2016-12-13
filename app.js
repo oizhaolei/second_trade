@@ -55,7 +55,7 @@ app.use(bodyParser.urlencoded({
 app.use(methodOver('_method'));
 
 app.use(favicon(path.join(__dirname, 'public/favicon.ico')));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
   logger.debug('\n----------- New Request ---------\nurl: %s\nquery: %s\nbody: %s\n--------------------------------- ', req.originalUrl, JSON.stringify(req.query), JSON.stringify(req.body));

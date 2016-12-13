@@ -62,7 +62,16 @@
   \{{#each products }}
   <div class="main_item">
     <a href="/product/\{{this._id}}">
-      \{{product_detail.product_name}}
+      <b>\{{product_detail.product_name}}</b>
+      <br>
+      \{{product_detail.product_desc}}
+      <br>
+      <div class="product_images">
+        \{{#each product_detail.images}}
+        <img class="product_image" style="width: 72px;height: 72px;background: url(\{{this}}?x-oss-process=image/resize,m_fill,h_72,w_72) 100% 100% no-repeat;">
+        </img>
+        \{{/each}}
+      </div>
     </a>
   </div>
   \{{/each}}

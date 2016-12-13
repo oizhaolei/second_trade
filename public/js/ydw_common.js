@@ -43,6 +43,43 @@
  }
 
 //wx下单
+function wx_upload(url, callback) {
+  var syncUpload = function(localIds){
+    var localId = localIds.pop();
+    wx.uploadImage({
+      localId: localId,
+      isShowProgressTips: 1,
+      success: function (res) {
+        var serverId = res.serverId; // 返回图片的服务器端ID
+        $.ajax({
+          url: url,
+          type: 'post',
+          data: {
+            mediaid: serverId
+          }
+        }).then(callback);
+
+        //其他对serverId做处理的代码
+        if(localIds.length > 0){
+          syncUpload(localIds);
+        }
+      }
+    });
+  };
+
+  wx.chooseImage({
+    count: 9,
+    sizeType: ['original', 'compressed'],
+    sourceType: ['album', 'camera'],
+    success: function (res) {
+      var localIds = res.localIds;
+      _log(localIds);
+      syncUpload(localIds);
+    }
+  });
+ }
+
+//wx下单
 function wx_unified(data, done, fail) {
   $.showLoading('下单中。。。');
   $.ajax({

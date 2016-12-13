@@ -92,14 +92,8 @@ const ProductSchema = Schema({
   product_detail: {
     product_name: String,
     product_desc: String,
-    galleries: [
-      {
-        image: {
-          url: String,
-          desc: String,
-          thumb: String,
-        },
-      },
+    images: [
+      String,
     ],
   },
   comments: [
@@ -117,26 +111,13 @@ const ProductSchema = Schema({
     },
   ],
   seller: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   create_date: {
     type: Date,
     default: Date.now(),
   },
-  participates: [
-    {
-      user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-      card_no: Number,
-      create_date: {
-        type: Date,
-        default: Date.now(),
-      },
-    },
-  ],
   winner: {
     user_no: Number,
   },

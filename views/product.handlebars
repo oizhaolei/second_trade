@@ -2,6 +2,7 @@
 <style>
  .swiper-container {
      width: 100%;
+     height: 350px;
  }
  .swiper-container img {
      display: block;
@@ -13,22 +14,51 @@
   <div class="bd">
     <div class="swiper-container">
       <div class="swiper-wrapper">
-        {{#each product.product_detail.galleries}}
+        {{#each product.product_detail.images}}
         <div class="swiper-slide">
-          <img src="{{@root.config.aliyun.prefix}}{{image.url}}" alt="{{../product_name}} {{../product_name}}">
+          <img src="{{this}}" alt="{{../product_name}} {{../product_name}}">
         </div>
         {{/each}}
       </div>
     </div>
-    
-    {{product.product_detail.product_name}}
-    <br>
-    {{product.product_detail.product_desc}}
+
+    <div class="weui_panel weui_panel_access">
+      <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+          <h4 class="weui_media_title">
+            {{product.product_detail.product_name}}
+          </h4>
+          <p class="weui_media_desc">
+            {{product.product_detail.product_desc}}
+          </p>
+        </div>
+      </div>
+    </div>
+    {{#if product.comments}}
+    <div id="comments" class="weui_panel weui_panel_access">
+      <div class="weui_panel_hd">评论一览</div>
+      <div class="weui_panel_bd">
+        {{#each product.comments}}
+        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
+          <div class="weui_media_hd">
+            <img class="weui_media_appmsg_thumb" src="" alt="">
+          </div>
+          <div class="weui_media_bd">
+            <p class="weui_media_desc">{{content}}</p>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
 
     <div class="ydw_bottom_area">
       <div class="weui-row">
-        <div class="weui-col-100">
-          <button class="weui_btn weui_btn_primary" id="btn_resv">{{#if (eq pack.location_status '箱格')}}预约{{else}}{{pack.location_status_title}}{{/if}}</button>
+        <div class="weui-col-80">
+          <textarea class="weui_textarea" id="comment" placeholder="请输入评论" rows="2"></textarea>
+        </div>
+        <div class="weui-col-20">
+            <a href="javascript:;" id="btn_send_comment" class="weui_btn weui_btn_mini weui_btn_default">发送</a>
         </div>
       </div>
     </div>
@@ -42,37 +72,26 @@
  jsApilist = jsApilist.concat([
  ]);
 
- var socket = io();
-
- socket.on('connect', function () {
-     socket.emit('user_id', '{{@root.session.openid}}');
- });
-
- socket.on('fetch_order', function (order) {
-     console.log(order);
-     if (order) {
-         if (order.order_status == 'payed') {
-             $.toptip("您已经有一个已预约待取出的玩具了。");
-         } else {
-             $.toptip("您手头上已经有一个玩具，请先归还。");
-         }
-     } else {
-         window.location = '/pack/{{pack.pack_serial}}/iwantresv';
-     }
- });
  $(function() {
      $(".swiper-container").swiper({
          loop: true,
          autoplay: 3000
      });
      //我要玩
-     $('#btn_resv').click(function () {
-         {{#if (eq pack.location_status '箱格')}}
-         socket.emit('fetch_order', {
-             user_id: {{@root.session.openid}},
-             order_status: ['payed', 'got']
+     $('#btn_send_comment').click(function () {
+         $.showLoading('数据提交中');
+         $.ajax({
+             url: '/product/{{req.params._id}}/comment',
+             type: 'post',
+             data: {
+                 user: '{{req.session.user._id}}',
+                 content: $('#comment').val()
+             }
+         }).done(function(res) {
+             $.hideLoading();
+             window.location = '/product/{{req.params._id}}'
          });
-         {{/if}}
+
      });
  });
 

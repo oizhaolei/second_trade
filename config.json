@@ -72,7 +72,7 @@
   },
 
   "aliyun": {
-    "static_content": "//youdewan-test.oss-cn-hangzhou.aliyuncs.com/wx",
+    "static_content": "",
     "thumb_img_prefix": "//youdewan-test.oss-cn-hangzhou.aliyuncs.com/thumb120",
     "toy_img_prefix": "//youdewan-test.oss-cn-hangzhou.aliyuncs.com/tmp",
     "oss": {
