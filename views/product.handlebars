@@ -27,9 +27,13 @@
         <div class="weui_media_box weui_media_text">
           <h4 class="weui_media_title">
             {{product.product_detail.product_name}}
+            {{product.product_detail.price}}
           </h4>
           <p class="weui_media_desc">
             {{product.product_detail.product_desc}}
+          </p>
+          <p class="weui_media_desc">
+            -- {{product.seller.nickname}}
           </p>
         </div>
       </div>
@@ -42,6 +46,7 @@
         <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
           <div class="weui_media_hd">
             <img class="weui_media_appmsg_thumb" src="" alt="">
+            <p class="weui_media_desc">{{user.nickname}}</p>
           </div>
           <div class="weui_media_bd">
             <p class="weui_media_desc">{{content}}</p>

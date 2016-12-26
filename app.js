@@ -1,4 +1,4 @@
-const config = require('./config.json');
+const config = require('./config.js');
 const logger = require('log4js').getLogger('app.js');
 const _ = require('lodash');
 const path = require('path');
@@ -77,7 +77,7 @@ app.use('/', require('./routers/index.js'));
 app.use('/product', require('./routers/product.js')); // order
 app.use('/u', require('./routers/u.js')); // user
 app.use('/weixin', require('./routers/weixin.js'));
-app.use('/test', require('./test/fake.js'));
+app.use('/fake', require('./routers/fake.js'));
 
 appHelper.helper(app, io);
 

@@ -1,5 +1,5 @@
 // 微信消息回调接口
-const config = require('../config.json');
+const config = require('../config.js');
 const logger = require('log4js').getLogger('routers/weixin.js');
 const _ = require('lodash');
 

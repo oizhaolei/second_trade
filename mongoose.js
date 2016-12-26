@@ -1,4 +1,4 @@
-const config = require('./config.json');
+const config = require('./config.js');
 const logger = require('log4js').getLogger('mongoose.js');
 
 const mongoose = require('mongoose');
@@ -92,6 +92,7 @@ const ProductSchema = Schema({
   product_detail: {
     product_name: String,
     product_desc: String,
+    price: Number,
     images: [
       String,
     ],

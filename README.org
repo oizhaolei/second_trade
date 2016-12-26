@@ -1,6 +1,6 @@
 * 说明
 ** 安装
  - npm install
- - vi config.json
+ - vi config.js
  - gulp less
  - cd /works/projects/youdewan_weixin/

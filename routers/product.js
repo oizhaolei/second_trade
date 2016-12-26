@@ -2,7 +2,7 @@
  * 订单相关
  */
 
-const config = require('../config.json');
+const config = require('../config.js');
 const logger = require('log4js').getLogger('routers/o.js');
 
 const curl = require('curlrequest');
@@ -33,7 +33,7 @@ router.get('/:_id', async (req, res, next) => {
       return;
     }
     //find
-    const product = await mdb.Product.findById(_id);
+    const product = await mdb.Product.findById(_id).populate('seller comments.user');
     res.render('product', {
       product,
     });

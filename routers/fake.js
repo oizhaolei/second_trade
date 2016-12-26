@@ -1,6 +1,6 @@
 //night相关
-const config = require('../config.json');
-const logger = require('log4js').getLogger('routers/zmxy.js');
+const config = require('../config.js');
+const logger = require('log4js').getLogger('router/fake.js');
 
 const moment = require('moment');
 
@@ -11,7 +11,7 @@ const router = express.Router();
 const seed = moment().unix();
 
 // 给当前用户的session加上必要的信息
-router.get('/fake/:openid', async(req, res, next) => {
+router.get('/:openid', async(req, res, next) => {
   const openid = req.params.openid;
   try {
     // user
@@ -31,7 +31,7 @@ router.get('/fake/:openid', async(req, res, next) => {
 
 
 // 给当前用户的session加上必要的信息
-router.get('/fake/new/:openid', async(req, res, next) => {
+router.get('/new/:openid', async(req, res, next) => {
   const openid = req.params.openid;
 
   const body = {

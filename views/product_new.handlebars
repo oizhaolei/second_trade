@@ -4,16 +4,6 @@
     <div class="weui_cells weui_cells_form">
       <div class="weui_cell">
         <div class="weui_cell_bd weui_cell_primary">
-          <textarea id="product_name" class="weui_textarea ydw_font_small" placeholder="标题" rows="1"></textarea>
-        </div>
-      </div>
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
-          <textarea id="product_desc" class="weui_textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
-        </div>
-      </div>
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
           <div class="weui_uploader">
             <div class="weui_uploader_bd">
               <ul class="weui_uploader_files">
@@ -23,6 +13,21 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <textarea id="product_name" class="weui_textarea ydw_font_small" placeholder="标题" rows="1"></textarea>
+        </div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <input id="price" class="weui_input" type="number" placeholder="请输入希望金额">
+        </div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <textarea id="product_desc" class="weui_textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
         </div>
       </div>
     </div>
@@ -56,6 +61,7 @@
                  seller: '{{req.session.user._id}}',
                  product_detail: {
                      product_name: $('#product_name').val(),
+                     price: $('#price').val(),
                      product_desc: $('#product_desc').val(),
                      images: previewUrls
                  }

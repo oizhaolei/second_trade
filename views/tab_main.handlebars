@@ -1,79 +1,92 @@
 <div class="weui_tab">
   <div class="weui_tab_bd">
-  <div id="tab_main" class="weui_tab_bd_item weui_tab_bd_item_active">
-    <div id="list" class="content-padded">
+    <div class="weui_search_bar" id="search_bar">
+      <form class="weui_search_outer">
+        <div class="weui_search_inner">
+          <i class="weui_icon_search"></i>
+          <input type="search" class="weui_search_input" id="search_input" name="keyword" placeholder="搜索" required/>
+          <a href="javascript:" class="weui_icon_clear" id="search_clear"></a>
+        </div>
+        <label for="search_input" class="weui_search_text" id="search_text">
+          <i class="weui_icon_search"></i>
+          <span>搜索</span>
+        </label>
+      </form>
+      <a href="javascript:" class="weui_search_cancel" id="search_cancel">取消</a>
     </div>
-
-    <div id="data_loading" class="weui-infinite-scroll">
-      <div class="infinite-preloader"></div>
-      正在加载。。。
-    </div>
-  </div>
-
-  {{> tabbar current='main'}}
-</div>
-{{#extend "scripts"}}
-<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
-<script src="//cdn.bootcss.com/lodash.js/4.16.6/lodash.min.js"></script>
-<script src="//cdn.bootcss.com/numeral.js/1.5.3/numeral.min.js"></script>
-<script src="//cdn.bootcss.com/socket.io/1.4.8/socket.io.min.js"></script>
-
-<script>
-
- var socket = io();
- var loading = false;
- var page = 1;
-
- socket.on('connect', function () {
-     socket.emit('openid', '{{@root.session.openid}}');
- });
-
- socket.on('query_products', function (products) {
-     /* console.log(products);*/
-     if (!products || products.length == 0) {
-         $('#tab_main').destroyInfinite();
-         $('#data_loading').text('没有更多的数据了。');
-     }
-     var template = Handlebars.compile($('#products-template').html());
-     $('#list').append(template({ products : products }));
-
-     loading = false;
- });
-
- $(function () {
-     $('#tab_main').infinite().on('infinite', function() {
-         if(loading) return;
-         loading = true;
-
-         socket.emit('query_products', {
-             openid: '{{@root.session.openid}}',
-             page: page++
-         });
-     });
-     socket.emit('query_products', {
-         openid: '{{@root.session.openid}}',
-         page: page++
-     });
- });
-
-</script>
-
-<script id="products-template" type="text/x-handlebars-template">
-  \{{#each products }}
-  <div class="main_item">
-    <a href="/product/\{{this._id}}">
-      <b>\{{product_detail.product_name}}</b>
-      <br>
-      \{{product_detail.product_desc}}
-      <br>
-      <div class="product_images">
-        \{{#each product_detail.images}}
-        <img class="product_image" style="width: 72px;height: 72px;background: url(\{{this}}?x-oss-process=image/resize,m_fill,h_72,w_72) 100% 100% no-repeat;">
-        </img>
-        \{{/each}}
+    <div id="tab_main" class="weui_tab_bd_item weui_tab_bd_item_active">
+      <div class="wrap-goods">
+        <ul class="goods-list group" id="goods_list"></ul>
       </div>
-    </a>
+      <div id="data_loading" class="weui-infinite-scroll">
+        <div class="infinite-preloader"></div>
+        正在加载。。。
+      </div>
+    </div>
+
+    {{> tabbar current='main'}}
   </div>
-  \{{/each}}
-</script>
-{{/extend}}
+  {{#extend "scripts"}}
+  <script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.min.js"></script>
+  <script src="//cdn.bootcss.com/lodash.js/4.16.6/lodash.min.js"></script>
+  <script src="//cdn.bootcss.com/numeral.js/1.5.3/numeral.min.js"></script>
+  <script src="//cdn.bootcss.com/socket.io/1.4.8/socket.io.min.js"></script>
+
+  <script>
+
+   var socket = io();
+   var loading = false;
+   var page = 1;
+
+   socket.on('connect', function () {
+       socket.emit('openid', '{{@root.session.openid}}');
+   });
+
+   socket.on('query_products', function (products) {
+       /* console.log(products);*/
+       if (!products || products.length == 0) {
+           $('#tab_main').destroyInfinite();
+           $('#data_loading').text('没有更多的数据了。');
+       }
+       var template = Handlebars.compile($('#products-template').html());
+       var view = template({ products : products });
+       $('#goods_list').append(view);
+
+       loading = false;
+   });
+
+   $(function () {
+       $('#tab_main').infinite().on('infinite', function() {
+           if(loading) return;
+           loading = true;
+
+           socket.emit('query_products', {
+               openid: '{{@root.session.openid}}',
+               page: page++
+           });
+       });
+       socket.emit('query_products', {
+           openid: '{{@root.session.openid}}',
+           page: page++
+       });
+   });
+
+  </script>
+
+  <script id="products-template" type="text/x-handlebars-template">
+    \{{#each products }}
+    <li class="goods-box">
+      <a href="/product/\{{this._id}}">
+        <div class="wrap-img">
+          <img src="\{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_300,w_300">
+        </div>
+        <div class="goods-attr">
+          <p class="goods-name">\{{product_detail.product_name}}</p>
+          <span class="goods-price">¥{{product_detail.price}}</span>
+          <span class="goods-address">-</span>
+        </div>
+      </a>
+    </li>
+    \{{/each}}
+  </script>
+  {{/extend}}

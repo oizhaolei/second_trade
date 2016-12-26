@@ -2,7 +2,7 @@
  * user information
  */
 
-const config = require('../config.json');
+const config = require('../config.js');
 const logger = require('log4js').getLogger('routers/u.js');
 
 const express = require('express');

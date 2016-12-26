@@ -1,5 +1,5 @@
 //首页的4个Tab入口
-const config = require('../config.json');
+const config = require('../config.js');
 const logger = require('log4js').getLogger('routers/index.js');
 
 const _ = require('lodash');
