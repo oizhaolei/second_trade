@@ -1,6 +1,7 @@
 <div class="cell">
   <div class="bd">
 
+    <div class="weui_cells_title">请拍几张照片，并提交商品描述</div>
     <div class="weui_cells weui_cells_form">
       <div class="weui_cell">
         <div class="weui_cell_bd weui_cell_primary">
@@ -22,22 +23,21 @@
       </div>
       <div class="weui_cell">
         <div class="weui_cell_bd weui_cell_primary">
-          <input id="price" class="weui_input" type="number" placeholder="请输入希望金额">
+          <textarea id="product_desc" class="weui_textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
         </div>
       </div>
       <div class="weui_cell">
+        <div class="weui_cell_hd"><label class="weui_label">希望价格(元)</label></div>
         <div class="weui_cell_bd weui_cell_primary">
-          <textarea id="product_desc" class="weui_textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
+          <input id="price" class="weui_input" style="text-align: right; " type="number" placeholder="请输入希望价格" value="0">
         </div>
       </div>
     </div>
 
-    <div class="ydw_bottom_area">
-      <div class="weui-row">
-        <div class="weui-col-100">
-          <a href="javascript:;" id="btn_new_product" class="weui_btn weui_btn_primary">发布</a>
-        </div>
-      </div>
+    <div class="weui_opr_area">
+      <p class="weui_btn_area">
+        <button href="javascript:;" id="btn_submit" class="weui_btn weui_btn_disabled weui_btn_primary">发布</button>
+      </p>
     </div>
   </div>
 </div>
@@ -52,7 +52,21 @@
  ]);
  var previewUrls = [];
  $(function () {
-     $('#btn_new_product').click(function () {
+     $('#btn_submit')
+         .prop('disabled', true)
+         .addClass('weui_btn_disabled');
+
+     $("#product_name,#product_desc,#price,").keyup(function() {
+         if($('#product_name').val().length >= 10 &&
+            $('#product_desc').val().length >= 10 &&
+            $('#price').val().length >= 1) {
+             $('#btn_submit').prop('disabled', false).removeClass('weui_btn_disabled');
+         } else {
+             $('#btn_submit').prop('disabled', true).addClass('weui_btn_disabled');
+         }
+     });
+
+     $('#btn_submit').click(function () {
          $.showLoading('数据提交中');
          $.ajax({
              url: '/product/new',
@@ -68,7 +82,9 @@
              }
          }).done(function(res) {
              $.hideLoading();
-             $.toast('数据上传完毕。');
+             $.toast('数据上传完毕。', function() {
+                 window.location = '/product/' + res.product._id;
+             });
          });
 
      });

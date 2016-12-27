@@ -25,6 +25,21 @@ const isValidSession = session =>
 /**
  * 商品
  */
+router.get('/new', async(req, res, next) => {
+  //new
+  res.render('product_new');
+});
+
+router.get('/comment/new/:product_id', async(req, res, next) => {
+  const product_id = req.params.product_id;
+  //new
+  const product = await mdb.Product.findById(product_id);
+
+  res.render('comment_new', {
+    product,
+  });
+});
+
 router.get('/:_id', async (req, res, next) => {
   const _id = req.params._id;
   try {
@@ -33,7 +48,9 @@ router.get('/:_id', async (req, res, next) => {
       return;
     }
     //find
-    const product = await mdb.Product.findById(_id).populate('seller comments.user');
+    const product = await mdb.Product
+          .findById(_id)
+          .populate('seller comments.user');
     res.render('product', {
       product,
     });
@@ -43,79 +60,15 @@ router.get('/:_id', async (req, res, next) => {
   }
 });
 
-router.get('/:_id/:action', async(req, res, next) => {
-  if (!isValidSession(req.session)) {
-    res.redirect('/');
-    return;
-  }
-
-  try {
-    const _id = req.params._id;
-    const action = req.params.action;
-
-    if (action === 'pub') { // 我要发布
-    } else if (action === 'leave_comment') { // 留言
-    } else if (action === 'reply_comment') { // reply
-    } else {
-      res.redirect(`/product/${_id}`);
-    }
-  } catch (err) {
-    logger.error(err);
-    next(err);
-  }
-});
-
-router.post('/:_id/:action', async(req, res, next) => {
-  if (!isValidSession(req.session)) {
-    res.redirect('/');
-    return;
-  }
-
-  try {
-    const _id = req.params._id;
-    const action = req.params.action;
-    logger.debug('body:', req.body);
-
-    if (action === 'comment') { // 留言
-      const comment = req.body;
-      const result = await mdb.Product.update({
-        _id,
-      }, {
-        $push: {
-          comments: {
-            $each: [comment],
-            $position: 0,
-          },
-        },
-      }, {
-        upsert: true,
-      });
-
-      res.json({
-        success: true,
-        result,
-      });
-    } else {
-      res.json({
-        success: false,
-        data: 'no action',
-      });
-    }
-  } catch (err) {
-    logger.error(err);
-    res.json({
-      success: false,
-      data: err,
-    });
-  }
-});
-
 router.post('/new', async(req, res, next) => {
   if (!isValidSession(req.session)) {
     res.redirect('/');
     return;
   }
   const product = req.body;
+  product.seller = req.session.user._id;
+
+  // TODO
   product.product_detail.images = [
     '//youdewan-test.oss-cn-hangzhou.aliyuncs.com/ugc/2kS7H5Fe5j1M7r5zpmV-4GeS_3bCNUgjF8t9hXs6cAoZS2jzjFB-BDIouN8-_5zG.jpg',
     '//youdewan-test.oss-cn-hangzhou.aliyuncs.com/ugc/1VyrXHrMONKQ8Pm-RizQLM-OAg_NlK3LPqdgQpakpkUZIX4d4blo-WTNdLmgGBLq.jpg',
@@ -148,6 +101,66 @@ router.post('/new', async(req, res, next) => {
       success: false,
       data: err,
     });
+  }
+});
+
+router.post('/comment', async(req, res, next) => {
+  if (!isValidSession(req.session)) {
+    res.redirect('/');
+    return;
+  }
+  const content = req.body.content;
+  try {
+    //save
+    const product = await mdb.Product.findByIdAndUpdate(req.body.product_id, {
+      $push: {
+        comments: {
+          $each: [{
+            content,
+            user: req.session.user._id,
+          }],
+          $position: 0,
+        },
+      },
+    }, {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      new: true,
+    });
+
+    res.json({
+      success: true,
+      product,
+    });
+  } catch (err) {
+    logger.error(err);
+    next(err);
+  }
+});
+
+router.post('/close/:product_id', async(req, res, next) => {
+  if (!isValidSession(req.session)) {
+    res.redirect('/');
+    return;
+  }
+
+  try {
+    //save
+    const product = await mdb.Product.findByIdAndUpdate(req.params.product_id, {
+      is_closed: true,
+    }, {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      new: true,
+    });
+
+    res.json({
+      success: true,
+      product,
+    });
+  } catch (err) {
+    logger.error(err);
+    next(err);
   }
 });
 

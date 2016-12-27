@@ -2,6 +2,7 @@ const config = require('./config.js');
 const logger = require('log4js').getLogger('mongoose.js');
 
 const mongoose = require('mongoose');
+mongoose.set('debug', true);
 
 const Schema = mongoose.Schema;
 mongoose.connect(config.mongoose.connect);
@@ -97,30 +98,31 @@ const ProductSchema = Schema({
       String,
     ],
   },
-  comments: [
-    {
+  comments: [{
       user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
       },
       content: String,
-      reply: String,
       create_date: {
         type: Date,
         default: Date.now(),
       },
-    },
-  ],
+    }],
   seller: {
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  create_date: {
-    type: Date,
-    default: Date.now(),
+  is_closed: {
+    type: Boolean,
+    default: false,
   },
   winner: {
     user_no: Number,
+  },
+  create_date: {
+    type: Date,
+    default: Date.now(),
   },
 });
 

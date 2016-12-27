@@ -1,0 +1,59 @@
+<div class="cell">
+  <div class="hd">
+    <h1 class="page_title">
+      {{product.product_detail.product_name}}
+    </h1>
+  </div>
+  <div class="bd">
+    <div class="weui_cells weui_cells_form">
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <textarea id="content" class="weui_textarea ydw_font_small" placeholder="请留言" rows="4" name="content"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="weui_opr_area">
+      <p class="weui_btn_area">
+        <button id="btn_submit" class="weui_btn weui_btn_disabled weui_btn_primary">提交</button>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!--Locate_nav end-->
+{{#extend "scripts"}}
+<script>
+ $(function () {
+     $('#btn_submit')
+         .prop('disabled', true)
+         .addClass('weui_btn_disabled');
+
+     $("#content").keyup(function() {
+         if($('#content').val().length >= 4) {
+             $('#btn_submit').prop('disabled', false).removeClass('weui_btn_disabled');
+         } else {
+             $('#btn_submit').prop('disabled', true).addClass('weui_btn_disabled');
+         }
+     });
+
+     $('#btn_submit').click(function () {
+         $.showLoading('留言提交中');
+         $.ajax({
+             url: '/product/comment',
+             type: 'post',
+             data: {
+                 product_id: '{{@root.req.params.product_id}}',
+                 content: $('#content').val(),
+             }
+         }).done(function(res) {
+             $.hideLoading();
+             $.toast('留言完毕。', function(){
+                 window.location = '/product/' + res.product._id;
+             });
+         });
+
+     });
+ });
+</script>
+{{/extend}}

@@ -21,82 +21,81 @@
         {{/each}}
       </div>
     </div>
+    <div class="weui_cells_title">{{ymd product.create_date 'YYYY-MM-DD'}}</div>
+    <div class="weui_cells">
+      <div class="weui_cell">
+        <div class="weui_cell_bd weui_cell_primary">
+          <p>{{product.product_detail.product_name}}</p>
+        </div>
+        <div class="weui_cell_ft">
+          价格:{{product.product_detail.price}}元
+        </div>
+      </div>
+      <div class="weui_cell">
+        <div class="weui_cell_bd">
+          <p>{{product.product_detail.product_desc}}</p>
+        </div>
+      </div>
+    </div>
 
     <div class="weui_panel weui_panel_access">
       <div class="weui_panel_bd">
-        <div class="weui_media_box weui_media_text">
-          <h4 class="weui_media_title">
-            {{product.product_detail.product_name}}
-            {{product.product_detail.price}}
-          </h4>
-          <p class="weui_media_desc">
-            {{product.product_detail.product_desc}}
-          </p>
-          <p class="weui_media_desc">
-            -- {{product.seller.nickname}}
-          </p>
-        </div>
-      </div>
-    </div>
-    {{#if product.comments}}
-    <div id="comments" class="weui_panel weui_panel_access">
-      <div class="weui_panel_hd">评论一览</div>
-      <div class="weui_panel_bd">
         {{#each product.comments}}
-        <a href="javascript:void(0);" class="weui_media_box weui_media_appmsg">
-          <div class="weui_media_hd">
-            <img class="weui_media_appmsg_thumb" src="" alt="">
-            <p class="weui_media_desc">{{user.nickname}}</p>
-          </div>
-          <div class="weui_media_bd">
-            <p class="weui_media_desc">{{content}}</p>
-          </div>
-        </a>
+        <div class="weui_media_box weui_media_text">
+          <h4 class="weui_media_title">{{ymd create_date 'YYYY-MM-DD'}} - {{user.nickname}}</h4>
+          <p class="weui_media_desc">{{content}}</p>
+        </div>
         {{/each}}
       </div>
     </div>
-    {{/if}}
-
-    <div class="ydw_bottom_area">
-      <div class="weui-row">
-        <div class="weui-col-80">
-          <textarea class="weui_textarea" id="comment" placeholder="请输入评论" rows="2"></textarea>
-        </div>
-        <div class="weui-col-20">
-            <a href="javascript:;" id="btn_send_comment" class="weui_btn weui_btn_mini weui_btn_default">发送</a>
-        </div>
-      </div>
+    <div class="weui_opr_area">
+      {{#if (not product.is_closed)}}
+      <p class="weui_btn_area">
+        <a href="/product/comment/new/{{product._id}}" class="weui_btn weui_btn_plain_primary" >留言</a>
+      </p>
+      {{#if (eq product.seller @root.req.session.user._id)}}
+      <p class="weui_btn_area">
+        <button id="btn_close" class="weui_btn weui_btn_plain_primary" >完成</button>
+      </p>
+      {{else}}
+      <p class="weui_btn_area">
+        <button id="btn_pay" class="weui_btn weui_btn_plain_primary" >支付定金</button>
+      </p>
+      {{/if}}
+      {{/if}}
     </div>
   </div>
 </div>
 
 {{#extend "scripts"}}
 <script type='text/javascript' src='//cdn.bootcss.com/jquery-weui/0.8.2/js/swiper.min.js'></script>
-<script src="//cdn.bootcss.com/socket.io/1.4.8/socket.io.min.js"></script>
 <script>
- jsApilist = jsApilist.concat([
- ]);
 
  $(function() {
      $(".swiper-container").swiper({
          loop: true,
          autoplay: 3000
      });
-     //我要玩
-     $('#btn_send_comment').click(function () {
-         $.showLoading('数据提交中');
-         $.ajax({
-             url: '/product/{{req.params._id}}/comment',
-             type: 'post',
-             data: {
-                 user: '{{req.session.user._id}}',
-                 content: $('#comment').val()
-             }
-         }).done(function(res) {
-             $.hideLoading();
-             window.location = '/product/{{req.params._id}}'
-         });
 
+     //submit
+     $('#btn_close').click(function () {
+         $.confirm("您确定要关闭这件商品吗？", function() {
+             $.ajax({
+                 url: '/product/close/{{product._id}}',
+                 type: 'POST',
+                 data: {
+                 }
+             }).then(function(data) {
+                 if (data.success) {
+                     $.toast(data.msg, function() {
+                         window.location = '/product/{{product._id}}';
+                     });
+                 } else {
+                     $.toptip(data.msg, 'warning');
+                 }
+             });
+         }, function() {
+         });
      });
  });
 

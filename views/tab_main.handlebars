@@ -78,12 +78,11 @@
     <li class="goods-box">
       <a href="/product/\{{this._id}}">
         <div class="wrap-img">
-          <img src="\{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_300,w_300">
+          <img src="\{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_200,w_200">
         </div>
         <div class="goods-attr">
           <p class="goods-name">\{{product_detail.product_name}}</p>
-          <span class="goods-price">¥{{product_detail.price}}</span>
-          <span class="goods-address">-</span>
+          <span class="goods-price">¥\{{product_detail.price}}元</span>
         </div>
       </a>
     </li>
