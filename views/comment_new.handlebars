@@ -5,17 +5,17 @@
     </h1>
   </div>
   <div class="bd">
-    <div class="weui_cells weui_cells_form">
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
-          <textarea id="content" class="weui_textarea ydw_font_small" placeholder="请留言" rows="4" name="content"></textarea>
+    <div class="weui-cells">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <textarea id="content" class="weui-textarea ydw_font_small" placeholder="请留言" rows="4" name="content"></textarea>
         </div>
       </div>
     </div>
 
-    <div class="weui_opr_area">
-      <p class="weui_btn_area">
-        <button id="btn_submit" class="weui_btn weui_btn_disabled weui_btn_primary">提交</button>
+  <div class="weui-msg__opr-area">
+    <p class="weui-btn-area">
+        <button id="btn_submit" class="weui-btn weui-btn_disabled weui-btn_primary">提交</button>
       </p>
     </div>
   </div>
@@ -27,13 +27,13 @@
  $(function () {
      $('#btn_submit')
          .prop('disabled', true)
-         .addClass('weui_btn_disabled');
+         .addClass('weui-btn_disabled');
 
      $("#content").keyup(function() {
          if($('#content').val().length >= 4) {
-             $('#btn_submit').prop('disabled', false).removeClass('weui_btn_disabled');
+             $('#btn_submit').prop('disabled', false).removeClass('weui-btn_disabled');
          } else {
-             $('#btn_submit').prop('disabled', true).addClass('weui_btn_disabled');
+             $('#btn_submit').prop('disabled', true).addClass('weui-btn_disabled');
          }
      });
 

@@ -21,45 +21,45 @@
         {{/each}}
       </div>
     </div>
-    <div class="weui_cells_title">{{ymd product.create_date 'YYYY-MM-DD'}}</div>
-    <div class="weui_cells">
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
+    <div class="weui-cells__title">{{ymd product.create_date 'YYYY-MM-DD'}}</div>
+    <div class="weui-cells">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
           <p>{{product.product_detail.product_name}}</p>
         </div>
-        <div class="weui_cell_ft">
+        <div class="weui-cell__ft">
           价格:{{product.product_detail.price}}元
         </div>
       </div>
-      <div class="weui_cell">
-        <div class="weui_cell_bd">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
           <p>{{product.product_detail.product_desc}}</p>
         </div>
       </div>
     </div>
 
-    <div class="weui_panel weui_panel_access">
-      <div class="weui_panel_bd">
+    <div class="weui-panel weui-panel_access">
+      <div class="weui-panel__bd">
         {{#each product.comments}}
-        <div class="weui_media_box weui_media_text">
-          <h4 class="weui_media_title">{{ymd create_date 'YYYY-MM-DD'}} - {{user.nickname}}</h4>
-          <p class="weui_media_desc">{{content}}</p>
+        <div class="weui-media-box__bd">
+          <h4 class="weui-media-box__title">{{ymd create_date 'YYYY-MM-DD'}} - {{user.nickname}}</h4>
+          <p class="weui-media-box__desc">{{content}}</p>
         </div>
         {{/each}}
       </div>
     </div>
-    <div class="weui_opr_area">
+    <div class="weui-msg__opr-area">
       {{#if (not product.is_closed)}}
-      <p class="weui_btn_area">
-        <a href="/product/comment/new/{{product._id}}" class="weui_btn weui_btn_plain_primary" >留言</a>
+      <p class="weui-btn-area">
+        <a href="/product/comment/new/{{product._id}}" class="weui-btn weui-btn_plain-primary" >留言</a>
       </p>
       {{#if (eq product.seller @root.req.session.user._id)}}
-      <p class="weui_btn_area">
-        <button id="btn_close" class="weui_btn weui_btn_plain_primary" >完成</button>
+      <p class="weui-btn-area">
+        <button id="btn_close" class="weui-btn weui-btn_plain-primary" >完成</button>
       </p>
       {{else}}
-      <p class="weui_btn_area">
-        <button id="btn_pay" class="weui_btn weui_btn_plain_primary" >支付定金</button>
+      <p class="weui-btn-area">
+        <button id="btn_pay" class="weui-btn weui-btn_plain-primary" >支付定金</button>
       </p>
       {{/if}}
       {{/if}}
@@ -68,7 +68,7 @@
 </div>
 
 {{#extend "scripts"}}
-<script type='text/javascript' src='//cdn.bootcss.com/jquery-weui/0.8.2/js/swiper.min.js'></script>
+<script type='text/javascript' src='//cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js'></script>
 <script>
 
  $(function() {

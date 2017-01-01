@@ -1,9 +1,21 @@
 <div class="cell">
   <div id="list" class="bd">
-    {{#each products }}
-    {{> product_item product=this }}
-    {{else}}
-    您没有已经发布的商品。
-    {{/each}}
+    <div class="weui-panel weui-panel_access">
+      <div class="weui-panel__bd">
+        {{#each products }}
+        <a class="weui-media-box weui-media-box_appmsg" href="/product/{{this._id}}">
+          <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" src="{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_200,w_200">
+          </div>
+          <div class="weui-media-box__bd">
+            <h5 class="weui-media-box__title">{{product_detail.product_name}}</h5>
+            <p class="weui-media-box__desc">¥{{product_detail.price}}元</p>
+          </div>
+        </a>
+        {{else}}
+        您没有已经发布的商品。
+        {{/each}}
+      </div>
+    </div>
   </div>
 </div>

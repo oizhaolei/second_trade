@@ -15,10 +15,6 @@ module.exports = {
     secret: '1efaef496dc1ea52a1ce7961c8737227',
     token: '0f3fe2e8b2e7599185cbc740e5f8b0be'
   },
-  merchant: {
-    id: '1295556701',
-    key: 'ke036bc2cd9dc80br609017756ccu489'
-  },
   spbill_create_ip: '123.57.221.177',
   wxpay_noti_url: 'https://wx.ydw123.cn/wxpay/noti',
 
@@ -58,4 +54,4 @@ module.exports = {
     resources: [
     ]
   }
-}
+};

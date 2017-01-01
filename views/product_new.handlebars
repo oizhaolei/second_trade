@@ -1,42 +1,42 @@
 <div class="cell">
   <div class="bd">
 
-    <div class="weui_cells_title">请拍几张照片，并提交商品描述</div>
-    <div class="weui_cells weui_cells_form">
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
-          <div class="weui_uploader">
-            <div class="weui_uploader_bd">
-              <ul class="weui_uploader_files">
+    <div class="weui-cells__title">请拍几张照片，并提交商品描述</div>
+    <div class="weui-cells">
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <div class="weui-uploader">
+            <div class="weui-uploader__bd">
+              <ul class="weui-uploader__files">
               </ul>
-              <div class="weui_uploader_input_wrp">
-                <input class="weui_uploader_input" type="button"/>
-              </div>
+              <div class="weui-uploader__input-box">
+                <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+                </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
-          <textarea id="product_name" class="weui_textarea ydw_font_small" placeholder="标题" rows="1"></textarea>
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <textarea id="product_name" class="weui-textarea ydw_font_small" placeholder="标题" rows="1"></textarea>
         </div>
       </div>
-      <div class="weui_cell">
-        <div class="weui_cell_bd weui_cell_primary">
-          <textarea id="product_desc" class="weui_textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
+      <div class="weui-cell">
+        <div class="weui-cell__bd">
+          <textarea id="product_desc" class="weui-textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
         </div>
       </div>
-      <div class="weui_cell">
-        <div class="weui_cell_hd"><label class="weui_label">希望价格(元)</label></div>
-        <div class="weui_cell_bd weui_cell_primary">
-          <input id="price" class="weui_input" style="text-align: right; " type="number" placeholder="请输入希望价格" value="0">
+      <div class="weui-cell">
+        <div class="weui-cell_hd"><label class="weui-label">希望价格(元)</label></div>
+        <div class="weui-cell__bd">
+          <input id="price" class="weui-input" style="text-align: right; " type="number" placeholder="请输入希望价格" value="0">
         </div>
       </div>
     </div>
 
-    <div class="weui_opr_area">
-      <p class="weui_btn_area">
-        <button href="javascript:;" id="btn_submit" class="weui_btn weui_btn_disabled weui_btn_primary">发布</button>
+  <div class="weui-msg__opr-area">
+    <p class="weui-btn-area">
+        <button href="javascript:;" id="btn_submit" class="weui-btn weui-btn_disabled weui-btn_primary">发布</button>
       </p>
     </div>
   </div>
@@ -54,15 +54,15 @@
  $(function () {
      $('#btn_submit')
          .prop('disabled', true)
-         .addClass('weui_btn_disabled');
+         .addClass('weui-btn_disabled');
 
-     $("#product_name,#product_desc,#price,").keyup(function() {
+     $("#product_name,#product_desc,#price").keyup(function() {
          if($('#product_name').val().length >= 10 &&
             $('#product_desc').val().length >= 10 &&
             $('#price').val().length >= 1) {
-             $('#btn_submit').prop('disabled', false).removeClass('weui_btn_disabled');
+             $('#btn_submit').prop('disabled', false).removeClass('weui-btn_disabled');
          } else {
-             $('#btn_submit').prop('disabled', true).addClass('weui_btn_disabled');
+             $('#btn_submit').prop('disabled', true).addClass('weui-btn_disabled');
          }
      });
 
@@ -88,12 +88,12 @@
          });
 
      });
-     $('.weui_uploader_input').click(function () {
+     $('.weui-uploader__input').click(function () {
          wx_upload('/product/upload', function(data) {
              if(data.success){
                  previewUrls.push(data.image);
-                 var insertHtml = '<li class=\"weui_uploader_file\" style=\"background-image:url(' + data.image + ')\" onclick=\"javascript:previewImage(\'' + data.image + '\');\"></li>';
-                 $('.weui_uploader_files').append(insertHtml);
+                 var insertHtml = '<li class=\"weui-uploader__file\" style=\"background-image:url(' + data.image + ')\" onclick=\"javascript:previewImage(\'' + data.image + '\');\"></li>';
+                 $('.weui-uploader__files').append(insertHtml);
              } else {
                  $.toast('图片上载出错啦', 'forbidden');
              }

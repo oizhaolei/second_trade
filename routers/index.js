@@ -82,20 +82,10 @@ router.get('/', (req, res, next) => {
 });
 
 /**
-   主Tab:信息一览
-*/
-router.get('/main', (req, res) => {
-  if (!isValidSession(req.session)) {
-    redirectOAuth(req, res, req.url);
-    return;
-  }
-  res.render('tab_main');
-});
-
-/**
+ 信息一览
  我的
- */
-router.get('/me', async (req, res, next) => {
+*/
+router.get('/main', async(req, res) => {
   if (!isValidSession(req.session)) {
     redirectOAuth(req, res, req.url);
     return;
@@ -104,7 +94,7 @@ router.get('/me', async (req, res, next) => {
     const me = await mdb.User.findOne({
       openid: req.session.openid,
     });
-    res.render('tab_me', {
+    res.render('tab_main', {
       user: me,
     });
   } catch (err) {

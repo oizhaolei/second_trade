@@ -18,7 +18,7 @@ const isValidSession = session => session.openid;
 // 历史记录 借还履历
 router.get('/my_products', async (req, res, next) => {
   if (!isValidSession(req.session)) {
-    res.redirect('/me');
+    res.redirect('/main');
     return;
   }
 
