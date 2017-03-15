@@ -1,6 +1,6 @@
 module.exports = {
   host: '127.0.0.1',
-  port: 3000,
+  port: 3006,
   session_secret: '19f508c900d840c408202e9e78a166bc',
 
   tmpdir: '/work/tmp',
@@ -13,7 +13,7 @@ module.exports = {
   app: {
     id: 'wx5af8155819acc93e',
     secret: '1efaef496dc1ea52a1ce7961c8737227',
-    token: '0f3fe2e8b2e7599185cbc740e5f8b0be'
+    token: '0f3fe2e8b2e7599185cbc740e5f8b0be',
   },
   spbill_create_ip: '123.57.221.177',
   wxpay_noti_url: 'https://wx.ydw123.cn/wxpay/noti',
@@ -21,7 +21,7 @@ module.exports = {
   redis: {
     host: '127.0.0.1',
     port: 6379,
-    password: 'huarui1111'
+    password: 'huarui1111',
   },
   smtp: 'smtp://kefu%40ydw123.cn:AliTest12301@smtp.ydw123.cn',
 
@@ -29,7 +29,7 @@ module.exports = {
   pageSize: 10,
 
   mongoose: {
-    connect: 'mongodb://localhost/secondhands'
+    connect: 'mongodb://localhost/secondhands',
   },
 
 
@@ -44,14 +44,14 @@ module.exports = {
       accessKeyId: 'IZt8IqsqDhxI6055',
       secretAccessKey: 'njtsCs5MCYSk4hwZUI3Ss4kNbLIQnt',
       endpoint: 'http://oss-cn-hangzhou.aliyuncs.com',
-      apiVersion: '2013-10-15'
-    }
+      apiVersion: '2013-10-15',
+    },
   },
   acl: {
     enabled: true,
     roles: [
     ],
     resources: [
-    ]
-  }
+    ],
+  },
 };

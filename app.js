@@ -11,9 +11,9 @@ const io = require('socket.io')(server);
 
 server.listen(config.port);
 
-const socketHelper = require('./lib/socket_helper.js');
-const appHelper = require('./lib/app_helper.js');
-const handlebarsHelper = require('./lib/handlebars_helper.js');
+const socketHelper = require('./lib/socket_helper');
+const appHelper = require('./lib/app_helper');
+const utilities = require('./lib/utilities');
 
 io.on('connection', socket => socketHelper.helper(socket));
 
@@ -28,7 +28,7 @@ const errors = require('./lib/errors');
 const redis = require('promise-redis')();
 
 const redisClient = redis.createClient(_.extend(config.redis, {
-  retry_strategy: require('./lib/utilities.js').redis_retry_strategy,
+  retry_strategy: utilities.redis_retry_strategy,
 }));
 
 // Config session
@@ -106,7 +106,7 @@ const Handlebars = exphbs.create({
 
       block.push(context.fn(this));
     },
-  }, handlebarsHelper.helper),
+  }, utilities.helper),
 });
 
 // View engine setup
