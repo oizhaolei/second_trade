@@ -91,11 +91,14 @@ router.get('/main', async(req, res) => {
     return;
   }
   try {
+    const product_tag = req.query.product_tag;
+    logger.debug("product_tag", product_tag);
     const me = await mdb.User.findOne({
       openid: req.session.openid,
     });
     res.render('tab_main', {
       user: me,
+      product_tag: product_tag,
     });
   } catch (err) {
     logger.error(err);

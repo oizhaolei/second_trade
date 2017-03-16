@@ -10,7 +10,7 @@
  }
 </style>
 {{/extend}}
-<div class="cell">
+<div class="cell" style="position: absolute; top: 0; bottom: 45px; overflow: auto;width: 100%;>
   <div class="bd">
     <div class="swiper-container">
       <div class="swiper-wrapper">
@@ -21,48 +21,73 @@
         {{/each}}
       </div>
     </div>
-    <div class="weui-cells__title">{{ymd product.create_date 'YYYY-MM-DD'}}</div>
-    <div class="weui-cells">
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <p>{{product.product_detail.product_name}}</p>
+    
+    <div class="weui-form-preview">
+      <div class="weui-form-preview__bd">
+        <div class="weui-form-preview__item">
+          <label class="weui-form-preview__label">商品</label>
+          <span class="weui-form-preview__value">{{product.product_detail.product_name}}</span>
         </div>
-        <div class="weui-cell__ft">
-          价格:{{product.product_detail.price}}元
+        <div class="weui-form-preview__item">
+          <label class="weui-form-preview__label">价格</label>
+          <span class="weui-form-preview__value">{{product.product_detail.price}}元</span>
+        </div>
+        <div class="weui-form-preview__item">
+          <label class="weui-form-preview__label">标签</label>
+          <a href="/main?product_tag={{product.product_detail.product_tag}}" class="weui-btn weui-btn_mini weui-btn_primary">{{product.product_detail.product_tag}}</a>
+        </div>
+        <div class="weui-form-preview__item">
+          <label class="weui-form-preview__label">发布时间</label>
+          <span class="weui-form-preview__value">{{ymd product.create_date 'YYYY-MM-DD'}}</span>
         </div>
       </div>
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <p>{{product.product_detail.product_desc}}</p>
+      <div class="weui-form-preview__ft">
+        {{#if (not product.is_closed)}}
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="/product/comment/new/{{product._id}}">留言</a>
+        {{#if (eq product.seller @root.req.session.user._id)}}
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" id="btn_close" >取消售卖</a>
+        {{else}}
+        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" id="btn_pay" >支付定金</a>
+        {{/if}}
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="weui-panel weui-panel_access">
+      <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <h4 class="weui-media-box__title">发布者</h4>
+          <p class="weui-media-box__desc">{{product.seller.nickname}}</p>
+        </div>
+        <div class="weui-media-box weui-media-box_text">
+          <h4 class="weui-media-box__title">联系方式</h4>
+          <p class="weui-media-box__desc">{{product.contact.name}}:{{product.contact.value}}</p>
         </div>
       </div>
     </div>
 
     <div class="weui-panel weui-panel_access">
       <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_text">
+          <h4 class="weui-media-box__title">商品描述</h4>
+          <p class="weui-media-box__desc">{{product.product_detail.product_desc}}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="weui-panel weui-panel_access">
+      <div class="weui-panel__hd">留言板</div>
+      <div class="weui-panel__bd">
         {{#each product.comments}}
-        <div class="weui-media-box__bd">
-          <h4 class="weui-media-box__title">{{ymd create_date 'YYYY-MM-DD'}} - {{user.nickname}}</h4>
+        <div class="weui-media-box weui-media-box_text">
           <p class="weui-media-box__desc">{{content}}</p>
+          <ul class="weui-media-box__info">
+            <li class="weui-media-box__info__meta">{{user.nickname}}</li>
+            <li class="weui-media-box__info__meta weui-media-box__info__meta_extra">{{ymd create_date 'YYYY-MM-DD'}}</li>
+          </ul>
         </div>
         {{/each}}
       </div>
-    </div>
-    <div class="weui-msg__opr-area">
-      {{#if (not product.is_closed)}}
-      <p class="weui-btn-area">
-        <a href="/product/comment/new/{{product._id}}" class="weui-btn weui-btn_plain-primary" >留言</a>
-      </p>
-      {{#if (eq product.seller @root.req.session.user._id)}}
-      <p class="weui-btn-area">
-        <button id="btn_close" class="weui-btn weui-btn_plain-primary" >完成</button>
-      </p>
-      {{else}}
-      <p class="weui-btn-area">
-        <button id="btn_pay" class="weui-btn weui-btn_plain-primary" >支付定金</button>
-      </p>
-      {{/if}}
-      {{/if}}
     </div>
   </div>
 </div>

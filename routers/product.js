@@ -34,9 +34,9 @@ router.get('/comment/new/:product_id', async(req, res, next) => {
   const product_id = req.params.product_id;
   //new
   const product = await mdb.Product.findById(product_id);
-
+  
   res.render('comment_new', {
-    product,
+    product
   });
 });
 

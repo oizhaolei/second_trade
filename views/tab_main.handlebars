@@ -1,12 +1,34 @@
 <div class="weui-tab">
   <div class="weui-tab__bd">
     <div id="tab-main" class="weui-tab__bd-item weui-tab__bd-item--active">
-      <div class="wrap-goods">
-        <ul class="goods-list group" id="goods_list"></ul>
+      <div class="weui-grids">
+        {{#each @root.config.product_tags }}
+        <a href="/main?product_tag={{this}}" class="weui-grid js_grid">
+          <p class="weui-grid__label">
+            {{this}}
+          </p>
+        </a>
+        {{/each}}
+        <a href="/main" class="weui-grid js_grid">
+          <p class="weui-grid__label">
+            全部
+          </p>
+        </a>
       </div>
-      <div id="data_loading" class="weui-infinite-scroll">
-        <div class="infinite-preloader"></div>
-        正在加载。。。
+      {{#if product_tag}}
+      <div class="weui-search-bar" style="height: 30px;">
+        <label class="weui-search-bar__label">
+          <i class="weui-icon-search"></i>
+          <span>{{product_tag}}</span>
+        </label>
+      </div>
+      {{/if}}
+      <div class="wrap-goods">
+        <div class="weui-grids" id="product_list"></div>
+      </div>
+      <div id="data_loading" class="weui-loadmore">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
       </div>
     </div>
     <div id="tab-me" class="weui-tab__bd-item">
@@ -14,7 +36,7 @@
         <div class="weui-panel__bd">
           <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
             <div class="weui-media-box__hd">
-              <img class="weui-media-box__thumb ydw_portrait" src="{{user.headimgurl}}" alt="">
+              <img class="weui-media-box__thumb" src="{{user.headimgurl}}" alt="" style="border-radius: 50%;">
             </div>
             <div class="weui-media-box__bd">
               <h4 class="weui-media-box__title">{{user.nickname}}</h4>
@@ -25,22 +47,17 @@
 
       <div class="weui-cells">
         <a class="weui-cell weui-cell_access" href="/product/new">
-          <div class="weui-cell__hd">
-            <i class="fa fa-plus-circle ydw_cell_hd_image" aria-hidden="true"></i>
-          </div>
           <div class="weui-cell__bd">
-            <p>发布商品</p>
+            <label for="name" class="weui-label">发布商品</label>
           </div>
           <div class="weui-cell__ft"></div>
         </a>
       </div>
+
       <div class="weui-cells">
         <a class="weui-cell weui-cell_access" href="/u/my_products">
-          <div class="weui-cell__hd">
-            <i class="fa fa-list ydw_cell_hd_image" aria-hidden="true"></i>
-          </div>
           <div class="weui-cell__bd">
-            <p>我的发布</p>
+            <label for="name" class="weui-label">我的发布</label>
           </div>
           <div class="weui-cell__ft"></div>
         </a>
@@ -51,17 +68,9 @@
 
   <!--tab start-->
   <div class="weui-tabbar">
-    <a href="#tab-main" class="weui-tabbar__item weui-bar__item--on">
-      <div class="weui-tabbar__icon">
-        <img src="{{@root.config.aliyun.static_content}}/images/wj{{#if (eq current 'main')}}{{else}}2{{/if}}.jpg" alt=""/>
-      </div>
-      <p class="weui-tabbar__label">一览</p>
+    <a href="#tab-main" class="weui-navbar__item weui_bar__item_on">商品一览
     </a>
-    <a href="#tab-me" class="weui-tabbar__item">
-      <div class="weui-tabbar__icon">
-        <img src="{{@root.config.aliyun.static_content}}/images/wd{{#if (eq current 'me')}}{{else}}2{{/if}}.png" alt=""/>
-      </div>
-      <p class="weui-tabbar__label">我的</p>
+    <a href="#tab-me" class="weui-navbar__item">个人中心
     </a>
   </div>
   <!--tab end-->
@@ -83,14 +92,13 @@
  });
 
  socket.on('query_products', function (products) {
-     /* console.log(products);*/
      if (!products || products.length < {{@root.config.pageSize}}) {
          $('#tab-main').destroyInfinite();
          $('#data_loading').text('没有更多的数据了。');
      }
      var template = Handlebars.compile($('#products-template').html());
      var view = template({ products : products });
-     $('#goods_list').append(view);
+     $('#product_list').append(view);
 
      loading = false;
  });
@@ -102,11 +110,13 @@
 
          socket.emit('query_products', {
              openid: '{{@root.session.openid}}',
+             product_tag: '{{product_tag}}',
              page: page++
          });
      });
      socket.emit('query_products', {
          openid: '{{@root.session.openid}}',
+         product_tag: '{{product_tag}}',
          page: page++
      });
  });
@@ -114,20 +124,18 @@
 </script>
 
 <script id="products-template" type="text/x-handlebars-template">
-  <div class="weui-panel weui-panel_access">
-    <div class="weui-panel__bd">
-      \{{#each products }}
-      <a class="weui-media-box weui-media-box_appmsg" href="/product/\{{this._id}}">
-        <div class="weui-media-box__hd">
-          <img class="weui-media-box__thumb" src="\{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_200,w_200">
-        </div>
-        <div class="weui-media-box__bd">
-          <h5 class="weui-media-box__title">\{{product_detail.product_name}}</h5>
-          <p class="weui-media-box__desc">¥\{{product_detail.price}}元</p>
-        </div>
-      </a>
-      \{{/each}}
+  \{{#each products }}
+  <a href="/product/\{{this._id}}" class="weui-grid js_grid" style="background-color: #fff;width:50%">
+    <div class="weui-grid__icon" style="width: 100%;height: 100%;">
+      <img src="\{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_200,w_200">
     </div>
-  </div>
+    <p class="weui-grid__label">
+      \{{product_detail.product_name}}
+    </p>
+    <em class="weui-grid__label" style="color:#09bb07">
+      ¥\{{product_detail.price}}元
+    </em>
+  </a>
+  \{{/each}}
 </script>
 {{/extend}}

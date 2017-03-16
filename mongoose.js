@@ -61,37 +61,12 @@ UserSchema.statics = {
 
 const User = exports.User = mongoose.model('User', UserSchema);
 
-//Tag
-const TagSchema = new Schema({
-  name: String,
-  products: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
-    },
-  ],
-  create_date: {
-    type: Date,
-    default: Date.now(),
-  },
-  update_date: {
-    type: Date,
-    default: Date.now(),
-  },
-});
-const Tag = exports.Tag = mongoose.model('Tag', TagSchema);
-
 //Product
 const ProductSchema = Schema({
-  Tag: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Tag',
-    },
-  ],
   click_count: Number,
   product_detail: {
     product_name: String,
+    product_tag: String,
     product_desc: String,
     price: Number,
     images: [
@@ -112,6 +87,10 @@ const ProductSchema = Schema({
   seller: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+  },
+  contact: {
+    name: String,
+    value: String,
   },
   is_closed: {
     type: Boolean,

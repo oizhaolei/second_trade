@@ -1,16 +1,19 @@
-<div class="cell">
+<div class="cell" style="position: absolute; top: 0; bottom: 45px; overflow: auto;width: 100%;>
   <div id="list" class="bd">
+    <div class="weui-cells__title">我的发布</div>
     <div class="weui-panel weui-panel_access">
-      <div class="weui-panel__bd">
+      <div class="weui-grids">
         {{#each products }}
-        <a class="weui-media-box weui-media-box_appmsg" href="/product/{{this._id}}">
-          <div class="weui-media-box__hd">
-            <img class="weui-media-box__thumb" src="{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_200,w_200">
+        <a href="/product/{{this._id}}" class="weui-grid js_grid" style="background-color: #fff;width:50%">
+          <div class="weui-grid__icon" style="width: 100%;height: 100%;">
+            <img src="{{product_detail.images.[0]}}?x-oss-process=image/resize,m_fill,h_200,w_200">
           </div>
-          <div class="weui-media-box__bd">
-            <h5 class="weui-media-box__title">{{product_detail.product_name}}</h5>
-            <p class="weui-media-box__desc">¥{{product_detail.price}}元</p>
-          </div>
+          <p class="weui-grid__label">
+            {{product_detail.product_name}}
+          </p>
+          <em class="weui-grid__label" style="color:#09bb07">
+            ¥{{product_detail.price}}元
+          </em>
         </a>
         {{else}}
         您没有已经发布的商品。

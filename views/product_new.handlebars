@@ -17,19 +17,40 @@
         </div>
       </div>
       <div class="weui-cell">
+        <div class="weui-cell__hd"><label for="name" class="weui-label">商品名</label></div>
         <div class="weui-cell__bd">
-          <textarea id="product_name" class="weui-textarea ydw_font_small" placeholder="标题" rows="1"></textarea>
+          <textarea id="product_name" class="weui-textarea ydw_font_small" placeholder="请输入商品名" rows="1"></textarea>
         </div>
       </div>
       <div class="weui-cell">
+        <div class="weui-cell__hd"><label for="name" class="weui-label">标签</label></div>
         <div class="weui-cell__bd">
-          <textarea id="product_desc" class="weui-textarea ydw_font_small" placeholder="详细说明" rows="4"></textarea>
+          <input class="weui-input" id="product_tag" type="text" value="" readonly="" placeholder="请选择商品标签" >
+        </div>
+      </div>
+      <div class="weui-cell">
+        <div class="weui-cell__hd"><label for="name" class="weui-label">商品描述</label></div>
+        <div class="weui-cell__bd">
+          <textarea id="product_desc" class="weui-textarea ydw_font_small" placeholder="请输入商品描述" rows="4"></textarea>
         </div>
       </div>
       <div class="weui-cell">
         <div class="weui-cell_hd"><label class="weui-label">希望价格(元)</label></div>
         <div class="weui-cell__bd">
           <input id="price" class="weui-input" style="text-align: right; " type="number" placeholder="请输入希望价格" value="0">
+        </div>
+      </div>
+      <div class="weui-cell weui-cell_select weui-cell_select-before">
+        <div class="weui-cell__hd">
+          <select class="weui-select" id="contact_name">
+            <option value="微信">微信</option>
+            <option value="QQ">QQ</option>
+            <option value="Email">Email</option>
+            <option value="手机">手机</option>
+          </select>
+        </div>
+        <div class="weui-cell__bd">
+          <input id="contact_value" class="weui-input" type="text" placeholder="请输入号码">
         </div>
       </div>
     </div>
@@ -52,14 +73,22 @@
  ]);
  var previewUrls = [];
  $(function () {
+     $("#product_tag").select({
+        title: "选择标签",
+        items: [{{#each @root.config.product_tags }}
+                {title: "{{this}}", value: "{{this}}"},
+               {{/each}}]
+      });
      $('#btn_submit')
          .prop('disabled', true)
          .addClass('weui-btn_disabled');
 
-     $("#product_name,#product_desc,#price").keyup(function() {
-         if($('#product_name').val().length >= 10 &&
-            $('#product_desc').val().length >= 10 &&
-            $('#price').val().length >= 1) {
+     $("#product_name,#product_desc,#price,#contact_value").keyup(function() {
+         if($('#product_name').val()!='' &&
+            $('#product_tag').val()!='' &&
+            $('#product_desc').val()!='' &&
+            $('#price').val() > 0 &&
+            $('#contact_value').val()!='') {
              $('#btn_submit').prop('disabled', false).removeClass('weui-btn_disabled');
          } else {
              $('#btn_submit').prop('disabled', true).addClass('weui-btn_disabled');
@@ -75,10 +104,12 @@
                  seller: '{{req.session.user._id}}',
                  product_detail: {
                      product_name: $('#product_name').val(),
+                     product_tag: $('#product_tag').val(),
                      price: $('#price').val(),
                      product_desc: $('#product_desc').val(),
                      images: previewUrls
-                 }
+                 },
+                 contact: {name: $('#contact_name').val(), value: $('#contact_value').val()}
              }
          }).done(function(res) {
              $.hideLoading();
